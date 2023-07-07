@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+
+    <LinearLayout
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginRight="20px"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/txtKeterangan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="Pembelian Sembako"
+            android:textSize="45px"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/txtTanggal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:text="01-01-23" />
+
+            <TextView
+                android:id="@+id/txtKategori"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/purple_500"
+                android:paddingHorizontal="20px"
+                android:text="Kategori"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtJumlah"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rp. 3,000"
+            android:textSize="55px" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnEdit"
+        android:layout_width="150px"
+        android:layout_height="150px"
+        android:layout_marginTop="25px"
+        android:text="E"
+        android:layout_marginRight="20px"
+        android:textColor="@color/white"
+        android:background="@drawable/custom_button"
+        android:textAllCaps="false" />
+    <Button
+        android:id="@+id/btnHapus"
+        android:layout_width="150px"
+        android:layout_height="150px"
+        android:layout_marginTop="25px"
+        android:text="H"
+        android:textColor="@color/white"
+        android:background="@drawable/custom_button"
+        android:textAllCaps="false" />
+
+</LinearLayout>
