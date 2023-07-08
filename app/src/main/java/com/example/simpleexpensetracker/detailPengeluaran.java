@@ -12,6 +12,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,6 +41,8 @@ public class detailPengeluaran extends AppCompatActivity {
 
     Button btnBack, btnFilter;
 
+    TextView txtTotalFilter;
+
     Spinner spnrKategori, spnrFilter;
 
     Context context;
@@ -51,6 +54,7 @@ public class detailPengeluaran extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail);
 
+        txtTotalFilter = (TextView) findViewById(R.id.txtTotalFilter);
         spnrKategori = (Spinner) findViewById(R.id.spnrKategori);
         spnrFilter = (Spinner) findViewById(R.id.spnrFilter);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
@@ -75,12 +79,14 @@ public class detailPengeluaran extends AppCompatActivity {
 
 // Set adapter ke spinner
         spnrFilter.setAdapter(adapter2);
-
+//        btnDownload = (Button) findViewById(R.id.btnDownload);
 
         listView = (ListView) findViewById(R.id.listView);
         context = this.getApplicationContext();
         btnBack = (Button) findViewById(R.id.btnBack);
         btnFilter = (Button) findViewById(R.id.btnFilter);
+        Button btnTambah = (Button) findViewById(R.id.btnTambah);
+        Button btnDownload = (Button) findViewById(R.id.btnDownload);
 
         Intent intent = getIntent();
 
@@ -93,10 +99,30 @@ public class detailPengeluaran extends AppCompatActivity {
 
         new Konektor(detailPengeluaran.this, "http://10.0.2.2/uas_mobile/api/pengeluaran/readPengeluaran.php", new Uri.Builder().appendQueryParameter("user_id", userId)).execute();
 
+        btnTambah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(detailPengeluaran.this, tambahActivity.class);
+                intent.putExtra("dataUser", user);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
+            }
+        });
+
+        btnDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(detailPengeluaran.this, webView.class);
+                intent.putExtra("dataUser", user);
+                startActivity(intent);
                 finish();
             }
         });
@@ -207,8 +233,10 @@ public class detailPengeluaran extends AppCompatActivity {
             try {
                 JSONObject result = new JSONObject(s);
                 String success = result.getString("success");
-                String totalPengeluaran = result.getString("jumlahPengeluaran");
-                totalPengeluaran = "Rp. " + totalPengeluaran;
+//                String totalPengeluaran = result.getString("jumlahPengeluaran");
+                String totalFilter = result.getString("totalFilter");
+                txtTotalFilter.setText("Rp. " + totalFilter);
+//                totalPengeluaran = "Rp. " + totalPengeluaran;
 //                String message = result.getString("message");
 
 
@@ -372,8 +400,10 @@ public class detailPengeluaran extends AppCompatActivity {
             try {
                 JSONObject result = new JSONObject(s);
                 String success = result.getString("success");
-                String totalPengeluaran = result.getString("jumlahPengeluaran");
-                totalPengeluaran = "Rp. " + totalPengeluaran;
+//                String totalPengeluaran = result.getString("jumlahPengeluaran");
+                String totalFilter = result.getString("totalFilter");
+//                totalPengeluaran = "Rp. " + totalPengeluaran;
+                txtTotalFilter.setText("Rp. " + totalFilter);
 //                String message = result.getString("message");
 
 

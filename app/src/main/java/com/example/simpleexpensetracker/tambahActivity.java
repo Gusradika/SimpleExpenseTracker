@@ -1,23 +1,24 @@
 package com.example.simpleexpensetracker;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.io.Serializable;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,64 +35,129 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Calendar;
 
+public class tambahActivity extends AppCompatActivity {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
 
-public class MainActivity extends AppCompatActivity {
-
-    private TextView register;
-    private EditText inputEmail, inputPassword;
-
-    private Button btnLogin;
-    User user;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.tambah);
 
-        register = (TextView) findViewById(R.id.txtRegister);
-        inputEmail = (EditText) findViewById(R.id.inputEmail);
-        inputPassword = (EditText) findViewById(R.id.inputPassword);
-        btnLogin = (Button) findViewById(R.id.btnLogin);
+        Button btnBack = findViewById(R.id.btnBack);
+        Button btnTambah = findViewById(R.id.btnTambah);
+        Button openCalendarButton = findViewById(R.id.openCalendarButton);
+        EditText inputTanggal = findViewById(R.id.inputTanggal);
+        Spinner spnrKategori = findViewById(R.id.spnrKategori);
+        EditText inputJudul = findViewById(R.id.inputJudul);
+        EditText inputJumlah = findViewById(R.id.inputJumlah);
+//        EditText inputJumlah = findViewById(R.id.inputJumlah);
 
-        register.setOnClickListener(new View.OnClickListener(){
+        inputTanggal.setFocusable(false);
+        inputTanggal.setClickable(false);
+
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+//        adapter2.add("All");
+        adapter2.add("Primer");
+        adapter2.add("Sekunder");
+        adapter2.add("Tersier");
+
+// Set adapter ke spinner
+        spnrKategori.setAdapter(adapter2);
+
+        Intent intent = getIntent();
+
+        User user = (User) intent.getSerializableExtra("dataUser");
+
+        // Gunakan objek yang diterima
+        String nama = user.getNama();
+        String email = user.getEmail();
+        String userId = user.getUserId();
+
+
+        btnTambah.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Log.d("TEST", "onClick: ");
-                Intent register = new Intent(MainActivity.this, register.class);
-                startActivity(register);
-            }
+
+                String judul = inputJudul.getText().toString();
+                String jumlah = inputJumlah.getText().toString();
+                String tanggal = inputTanggal.getText().toString();
+                String kategori = spnrKategori.getSelectedItem().toString();
+
+                if(!judul.isEmpty()){
+                    if(!jumlah.isEmpty()){
+                        if(!tanggal.isEmpty()){
+
+                                new Konektor(tambahActivity.this, "http://10.0.2.2/uas_mobile/api/pengeluaran/createPengeluaran.php", new Uri.Builder().appendQueryParameter("user_id", userId).appendQueryParameter("nama_pengeluaran", judul).appendQueryParameter("kategori_id", kategori).appendQueryParameter("date", tanggal).appendQueryParameter("value", jumlah)).execute();
+
+                        }else{cetakError();}
+                    }else {cetakError();}
+                }else{
+                    cetakError();
+                }
+
+                    }
         });
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        openCalendarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
-                String email = inputEmail.getText().toString();
-                String password = inputPassword.getText().toString();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(tambahActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        // Tangkap tanggal yang dipilih
+                        String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
 
-                new Konektor(MainActivity.this, "http://10.0.2.2/uas_mobile/api/user/validateUser.php", new Uri.Builder().appendQueryParameter("email", email).appendQueryParameter("password", password)).execute();
+                        // Set nilai tanggal ke dalam EditText
+                        inputTanggal.setText(selectedDate);
+                    }
+                }, year, month, dayOfMonth);
 
+                datePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        // Tutup DatePicker setelah pengguna memilih tanggal
+                        datePickerDialog.dismiss();
+                    }
+                });
+
+                datePickerDialog.show();
             }
         });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
+
 
     private class Konektor extends AsyncTask<String, String, String> {
         private static final int READ_TIMEOUT = 15000;
         private static final int CONNECTION_TIMEUT = 10000;
         Context context;
+        ProgressDialog pdLoading;
         HttpURLConnection conn;
         URL url = null;
-        String situs;
+        String clientUrl;
         //        String p1, p2, p3;
         Uri.Builder builder;
         String result = null;
 
 
-        public Konektor(Context context, String situs, Uri.Builder builder) {
+        public Konektor(Context context, String clientUrl, Uri.Builder builder) {
             this.context = context;
-            this.situs = situs;
+            this.clientUrl = clientUrl;
             this.builder = builder;
         }
 
@@ -108,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
 
             try {
-                url = new URL(situs);
+                url = new URL(clientUrl);
 
                 System.out.println("try 1");
             } catch (MalformedURLException e) {
@@ -178,29 +244,9 @@ public class MainActivity extends AppCompatActivity {
 
 
                 if (success.equals("1")) {
-                    System.out.println("success");
-                    System.out.println(result);
-                    JSONArray users = result.getJSONArray("data");
-                    JSONObject userData = null;
-                    for (int i = 0; i < users.length(); i++) {
-                        userData = users.getJSONObject(i);
-//                        System.out.println(userData);
-                        String user_id = userData.getString("user_id");
-                        String nama = userData.getString("nama");
-                        String telp = userData.getString("telp");
-                        String email = userData.getString("email");
-                        // nama, email, telp, user_id
-                        user = new User(nama, email, telp, user_id);
-                        Log.d("Debug", user.getUserId());
-                        Log.d("Debug", user.getEmail());
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                        intent.putExtra("dataUser", user);
-                        startActivity(intent);
-                        finish();
-                    }
 
-//                    System.out.println(dataUser.toString());
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    finish();
                 } else {
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
 //                    txtMessageError.setVisibility(View.VISIBLE);
@@ -213,13 +259,9 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-
-
-//            txtStatus.setText(s.toString());
-//            txtStatusLogin.setText(s.toString());
         }
     }
-
-
-
+    private void cetakError(){
+        Toast.makeText(getApplicationContext(), "Inputan tidak boleh kosong! / Email tidak boleh mengandung spasi", Toast.LENGTH_LONG).show();
+    }
 }

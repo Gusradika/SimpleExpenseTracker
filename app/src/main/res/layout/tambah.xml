@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50px"
+            android:layout_marginRight="50px"
+            android:text="back" />
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textSize="60px"
+          android:textStyle="bold"
+          android:layout_marginRight="50px"
+          android:layout_marginLeft="50px"
+            android:layout_marginBottom="50px"
+          android:text="+ Tambah Pengeluaran"
+          ></TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="40px"
+            android:textStyle="bold"
+            android:layout_marginRight="50px"
+            android:layout_marginLeft="100px"
+            android:text="Nama Pengeluaran"
+            ></TextView>
+        <EditText
+            android:id="@+id/inputJudul"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10px"
+            android:background="@drawable/custom_edittext_dark"
+            android:padding="40px"
+            android:layout_marginBottom="50px"
+            android:layout_marginRight="100px"
+            android:layout_marginLeft="100px"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Beli Sepatu..."
+            android:inputType="textPersonName"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="40px"
+            android:textStyle="bold"
+            android:layout_marginRight="50px"
+            android:layout_marginLeft="100px"
+            android:text="Kategori"
+            ></TextView>
+
+        <Spinner
+            android:id="@+id/spnrKategori"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="100px"
+            android:layout_marginRight="50px"
+            android:layout_marginBottom="50px"
+            android:layout_height="48dp"
+          />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="40px"
+            android:textStyle="bold"
+            android:layout_marginRight="50px"
+            android:layout_marginLeft="100px"
+            android:text="Jumlah"
+            ></TextView>
+        <EditText
+            android:id="@+id/inputJumlah"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10px"
+            android:background="@drawable/custom_edittext_dark"
+            android:padding="40px"
+            android:layout_marginRight="100px"
+            android:layout_marginLeft="100px"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginBottom="50px"
+            android:hint="Masukan jumlah..."
+            android:inputType="number"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100px"
+            android:layout_marginRight="50px"
+            android:text="Tanggal"
+            android:textSize="40px"
+            android:textStyle="bold"></TextView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/inputTanggal"
+                android:layout_width="match_parent"
+                android:layout_marginTop="20px"
+                android:background="@drawable/custom_edittext_dark"
+                android:padding="40px"
+
+                android:layout_marginRight="20px"
+                android:layout_marginLeft="100px"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_marginBottom="50px"
+                android:hint="2000-09-15"
+                android:inputType="textPersonName"
+                />
+
+            <Button
+                android:id="@+id/openCalendarButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="70px"
+                android:text="Pilih Tanggal" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btnTambah"
+            android:background="@drawable/custom_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="360px"
+            android:layout_marginRight="100px"
+            android:layout_marginLeft="100px"
+            android:text="Tambah" />
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

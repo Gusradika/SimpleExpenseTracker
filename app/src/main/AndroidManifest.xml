@@ -24,6 +24,8 @@
         <activity android:name="com.example.simpleexpensetracker.register" />
         <activity android:name="com.example.simpleexpensetracker.HomeActivity" />
         <activity android:name="com.example.simpleexpensetracker.detailPengeluaran" />
+        <activity android:name="com.example.simpleexpensetracker.tambahActivity" />
+        <activity android:name="com.example.simpleexpensetracker.webView" />
     </application>
 
 </manifest>

@@ -24,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -42,12 +43,12 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    TextView txtNama, txtEmail, txtTotalHari, txtTotalBulan;
+    TextView txtNama, txtEmail, txtTotalHari, txtTotalBulan, txtPrimer, txtSekunder, txtTersier, txtPrimerHarian, txtSekunderHarian, txtTersierHarian;
 
 
     Context context;
 
-    Button btnLogout, btnDetail;
+    Button btnLogout, btnDetail, btnRefresh, btnTambah;
 
     User user;
 // ...
@@ -57,7 +58,16 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
+        btnTambah = (Button) findViewById(R.id.btnTambah);
 
+        btnRefresh = (Button) findViewById(R.id.btnRefresh);
+
+txtPrimer = (TextView) findViewById(R.id.txtPrimer);
+txtSekunder = (TextView) findViewById(R.id.txtSekunder);
+txtTersier = (TextView) findViewById(R.id.txtTersier);
+txtPrimerHarian = (TextView) findViewById(R.id.txtPrimerHarian);
+txtSekunderHarian = (TextView) findViewById(R.id.txtSekunderHarian);
+txtTersierHarian = (TextView) findViewById(R.id.txtTersierHarian);
 
         txtNama = (TextView) findViewById(R.id.txtNama);
         txtTotalHari = (TextView) findViewById(R.id.txtTotalHari);
@@ -83,12 +93,29 @@ public class HomeActivity extends AppCompatActivity {
         txtNama.setText(nama);
         txtEmail.setText(email);
 
+        btnTambah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, tambahActivity.class);
+                intent.putExtra("dataUser", user);
+                startActivity(intent);
+            }
+        });
+
         btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, detailPengeluaran.class);
                 intent.putExtra("dataUser", user);
                 startActivity(intent);
+//                finish();
+            }
+        });
+
+        btnRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Konektor(HomeActivity.this, "http://10.0.2.2/uas_mobile/api/pengeluaran/readPengeluaran.php", new Uri.Builder().appendQueryParameter("user_id", userId)).execute();
 //                finish();
             }
         });
@@ -208,9 +235,25 @@ public class HomeActivity extends AppCompatActivity {
                 JSONObject result = new JSONObject(s);
                 String success = result.getString("success");
                 String totalPengeluaran = result.getString("jumlahPengeluaran");
+                String totalPengeluaranHarian = result.getString("jumlahPengeluaranHarian");
+                String totalPrimer = result.getString("jumlahPrimer");
+                String totalPrimerHari = result.getString("jumlahPrimerHari");
+                String totalSekunder = result.getString("jumlahSekunder");
+                String totalSekunderHari = result.getString("jumlahSekunderHari");
+                String totalTersier = result.getString("jumlahTersier");
+                String totalTersierHari = result.getString("jumlahTersierHari");
+
+
                 totalPengeluaran = "Rp. " + totalPengeluaran;
-                txtTotalHari.setText(totalPengeluaran);
+                txtTotalHari.setText("Rp. " + totalPengeluaranHarian);
                 txtTotalBulan.setText(totalPengeluaran);
+                txtPrimer.setText("Rp. " + totalPrimer);
+                txtSekunder.setText("Rp. " + totalSekunder);
+                txtTersier.setText("Rp. " + totalTersier);
+
+                txtPrimerHarian.setText("Rp. " + totalPrimerHari);
+                txtSekunderHarian.setText("Rp. " + totalSekunderHari);
+                txtTersierHarian.setText("Rp. " + totalTersierHari);
 //                String message = result.getString("message");
 
 
